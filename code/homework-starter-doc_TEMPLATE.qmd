@@ -3,7 +3,7 @@ title: "Homework starter document"
 format:
   html: 
     toc: true # includes a table of contents in rendered html format
-execute: # for all code chunks
+execute: # for all code chunks, in rendered doc
     warning: false # do not display warnings
     message: false # do not display messages
 ---
@@ -95,11 +95,11 @@ ggpairs(drought_exp_clean, # data frame
 
 Choose 3 pairs of variables to compare. Make notes of those comparisons below.    
 
-**insert comparison 1 here**  
+**Shoot mass and total mass have a strong positive correlation (Pearson's r = 0.902)**  
 
-**insert comparison 2 here**  
+**Specific leaf area (SLA) and leave dry weight are not correlated (Pearson's r = 0.033)**  
 
-**insert comparison 3 here**
+**root mass and shoot mass have a positive correlation (Pearson's r = 0.553)**
 
 ## Preliminary visualizations  
 
