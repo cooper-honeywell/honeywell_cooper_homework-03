@@ -89,15 +89,15 @@ a.
 
     To affectively visualize my personal data, I was thinking of doing something similar to the Dear Data project. I would make an entry everyday of the week, inclusing symbols that describe my data. Each entry would signify a day and how many times I went to the arbor, how many times I visited the grass, as well as if I was was with friends or not.
 
-b.  
+b.  Sketch
 
     ![](images/clipboard-4054445157.png)
 
-c.  
+c.  Draft
 
     ![](images/affective viz.jpg)
 
-d.  
+d.  Artist Statement
 
 This piece is showing the frequency in which I visit the Arbor and grass in front of the UCSB library respectively, as well as if I visited those places with friends or alone. It is separated by day of the week with a separate row for each week. Each fish tank corresponds to one day, fish type corresponds either the Arbor (orange), or the grass (green), and a top hat signifies that I was with friends during that visit. I created this piece digitally on the platform Canva. It was influenced by the Dear Data postcard project where different things were tracked and documented on a postcard using symbols.
 
