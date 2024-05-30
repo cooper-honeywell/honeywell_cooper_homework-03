@@ -103,7 +103,7 @@ This piece is showing the frequency in which I visit the Arbor and grass in fron
 
 ### Problem 3: Statistical Critique
 
-a.
+a. Summary
 
 The authors used a Mann-Whitney-U Test to evaluate differences in the use of altitude ranges
 by both snow and common leopards to determine how much their geographical ranges overlap. They also compiled data from studies depicting the diets of each leopard and summarized it to describe how much of each leopards diet consists of a certain group of prey to explore the overlap in the two predators diets. All to determine the likelihood of competition between two species that used to be separated by thousands of feet in elevation.
@@ -116,18 +116,18 @@ by both snow and common leopards to determine how much their geographical ranges
 
 ![](images/clipboard-1838738008.png)
 
-b.  
+b.  Visual Clarity
 
     Fig 1 is kind of difficult to digest as you have to refer back and forth between two maps to see where the species overlap and what their diet consists of. The pie charts represent the composition of the leopard's diet in each location using the frequency of occurrence of prey type.
 
     Fig 2 is much clearer in communicating the data. The axes are clear and labeled, the bars are shaded based on species and the error bars are easy to see. They are showing the means and standard error for the prey weight categories % relative frequency of occurrence. The did not include the underlying data.
 
-c.  
+c.  Aesthetics
 
     Fig 1 has too much visual clutter in my opinion. The borders of the maps where the leopards don't live is distracting. The numbers corresponding to each study area/pie chart could be mistaken for something else if you don't read the caption carefully. Having two maps to look back and forth between seems like too much clutter. I would say there is too much ink in the data:ink ratio.
 
     Fig 2 is a clean figure. It presents the data clearly and is not complicated to see the trends. I think it passes the data:ink ratio test.
 
-d.  
+d.  Recommendations
 
 My main recommendation would be to make one map, with two different shadings for each leopards geographic range and each study site labeled. And then paired with that they could include plots faceted by study site or elevation, comparing the diet composition of both leopards. This would make it easier to compare the two species and their diets. This would help in visualizing if there is a higher chance for competition between the leopards at different sites/elevations.
