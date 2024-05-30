@@ -65,6 +65,12 @@ c.  Visualization
         water == "DS" ~ "Drought stressed"
       )) %>% 
       relocate(water_treatment, .after = water) # moving water_treatment column after water
+
+    model4 <- lm(total_g ~ water_treatment + species_name,
+                 data = drought_exp_clean)
+    model_preds4 <- ggpredict(model4, 
+                             terms = c( "species_name", 
+                                       "water_treatment"))
     ```
 
     ```{r - visualization}
