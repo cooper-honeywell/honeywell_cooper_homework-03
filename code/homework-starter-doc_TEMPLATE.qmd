@@ -92,6 +92,16 @@ ggpairs(drought_exp_clean, # data frame
   theme_bw() + # cleaner theme
   theme(panel.grid = element_blank()) # getting rid of gridlines
 ```
+```{r}
+ggpairs(drought_exp_clean, # data frame
+        columns = c(                   # columns to visualize
+                    "sla", 
+                    "total_g"), 
+        upper = list(method = "pearson")) + # calculating Pearson correlation coefficient
+  theme_bw() + # cleaner theme
+  theme(panel.grid = element_blank()) # getting rid of gridlines
+```
+
 
 Choose 3 pairs of variables to compare. Make notes of those comparisons below.    
 
@@ -209,6 +219,14 @@ plot(model3)
 ```
 **look at diagnostics later**
 
+ **total biomass as a function of water treatment and species**
+```{r}
+model4 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+
+plot(model4)
+```
+ 
 # Model selection
 
 From the `MuMIn` package
@@ -217,17 +235,20 @@ From the `MuMIn` package
 model.sel(model0,
           model1, 
           model2, 
-          model3)
+          model3,
+          model4)
 ```
 
 Out of the four models we have tried, the best model is the one that includes **Model 1 with all three predictors: SLA, species, water treatment**  
+
+**after adding model 4, using just water treatment and species is the best model.**
 
 Note that this may change once you fit and compare the other model!
 **check diagnostics**
 # Model summary
 
 ```{r}
-summary(model1)
+summary(model4)
 ```
 
 What are the reference levels?  
@@ -251,10 +272,20 @@ Interpret the model estimates for the:
 **Note:** only plot terms in the model you select - if your doesn't include one of these terms, take it out and adjust the plotting code accordingly!
 
 ```{r}
-model_preds <- ggpredict(model1, 
-                         terms = c("sla",
-                                   "water_treatment", 
+model_preds <- ggpredict(model4, 
+                         terms = c(
+                          "water_treatment", 
                                    "species_name"))
+
+# use View(model_preds) to see the predictions as a data frame
+# use model_preds to see the predictions formatted nicely
+```
+
+```{r model 4}
+model_preds4 <- ggpredict(model4, 
+                         terms = c( "species_name", 
+                                   "water_treatment"))
+View(model_preds4)
 
 # use View(model_preds) to see the predictions as a data frame
 # use model_preds to see the predictions formatted nicely
@@ -266,7 +297,7 @@ model_preds <- ggpredict(model1,
 
 ```{r}
 # plot function within ggeffects
-plot(model_preds, # model predictions
+plot(model_preds4, # model predictions
      limit_range = TRUE, # limit the range of predictions to the range of predictor values
      show_data = TRUE) + # show the underlying data
   # everything below this is ggplot() stuff
@@ -278,9 +309,36 @@ plot(model_preds, # model predictions
 The "more customizable" way:
 
 ```{r}
+
+ggplot() +
+       geom_point(data = drought_exp_clean, # underlying data
+             aes(x = water_treatment,
+                 y = total_g,
+                 color = water_treatment)) +
+  facet_wrap(~species_name) +  # creating different panels for species
+  geom_point(data = model_preds4, 
+             aes(x = group, 
+                 y = predicted), 
+             color = "black",
+             size = 2) + # making the predicted points larger for visibility
+  geom_errorbar(data = model_preds4, 
+                aes(x = group, 
+                    ymin = conf.low, 
+                    ymax = conf.high), 
+                width = 0.2, 
+                color = "black") +
+  facet_wrap(~x)+
+  theme_classic() +
+  theme(panel.spacing = unit(1, "lines"))+
+  labs(x = "Water Treatment", y = "Total Mass (g)")
+   
+
+
+```
+```{r}
 # creating new data frame of model predictions for plotting
-model_preds_for_plotting <- model_preds %>% 
-  rename(sla = x, # renaming columns to make this easier to use
+model4_preds_for_plotting <- model_preds4 %>% 
+  rename(               # renaming columns to make this easier to use
          water_treatment = group,
          species_name = facet)
 
@@ -313,14 +371,26 @@ ggplot() +
 ```
 
 
+```{r}
+ggplot() +
+                                          # underlying data
+  geom_point(data = model_preds4,
+             aes(x = group,
+                 y = predicted,
+                 color = group)) +
+  theme_classic() +
+  facet_wrap(~x) # creating different panels for species
+```
+
+
 # Making a table
 
 ```{r}
 # one option for a single model
-flextable::as_flextable(model1) 
+#flextable::as_flextable(model4) 
 
 # another option for a single model
-gtsummary::tbl_regression(model1)
+#gtsummary::tbl_regression(model4)
 
 # comparing models
 modelsummary::modelsummary( # this function takes a list of models
@@ -328,9 +398,10 @@ modelsummary::modelsummary( # this function takes a list of models
     "null" = model0, # "model name" = model object
     "model 1" = model1,
     "model 2" = model2,
-    "model 3" = model3
+    "model 3" = model3,
+    "model 4" = model4
   )
-) 
+)
 
 ```
 

@@ -21,44 +21,23 @@ library(flextable)
 library(modelsummary)
 ```
 
-Problem 1: a. Make a table or list of all the models from class and the
-last one you constructed on your own. Write a caption for your table. (8
-points)
+Problem 1:
+
+a\.
 
 ```{r}
-# comparing models
-modelsummary::modelsummary( # this function takes a list of models
-  list( 
-    "null" = model0, # "model name" = model object
-    "model 1" = model1,
-    "model 2" = model2,
-    "model 3" = model3,
-    "model 4" = model4
-  )
-)
+model_table <- read.csv("model_table.csv")
+flextable::as_flextable(model_table) 
 ```
 
-Table: In your table, each row should be a model with the model number
-(1, 2, 3, etc.) and the predictors for each model.
+Table 1: Predictor Variables Distribution Among Models
 
-Caption: table captions typically go above the table. Number the table
-and provide a title. Describe what is in the table (columns and rows).
-
-Table 1: Model summary of effects on total biomass of Native Plants.
-
-Each row corresponds to a model, one with no predictors (null), model 1
-is the saturated model with all three predictors, SLA, water treatment,
-and species. Model 2 contains SLA and water treatment. Model 3 contains
-SLA and species. Model 4 contains water treatment and species. The
-intercept row shows the reference value. For our three predictor
-variables, the corresponding slope is shown for each model, if all other
-variables are held constant. This value shows the change in biomass that
-variable had on the plant in comparison to the reference. Because some
-of the models do not contain all of the predictor variables, some cells
-are shown empty (ie Model 2 won't have values for any of the species as
-it only includes SLA and water treatment.)
-
-![](images/clipboard-2727890508.png)
+The table rows correspond to an individual model that was evaluated.
+Each column is a possible predictor variable that is used to make the
+model. An "n/a" signifies that that particular model does not contain
+that variable at all. ie: Model 0 does not contain any of the predictor
+variables, making it the null model, Model 1 contains all three
+predictor variables making it the saturated model.
 
 b.  Write a 5-6 sentence “statistical methods” section. (8 points) Your
     answer should be in paragraph form and include:
@@ -91,6 +70,37 @@ treatment, and species on total biomass.
 c.  Make a visualization of the model predictions with underlying data
     for your “best” model. (20 points) Show and annotate all your code.
     For full credit:
+
+    ```{r - visualization}
+    type_colors <- c("Well watered" = "dodgerblue1", "Drought stressed" = "sienna") 
+    ggplot() +
+           geom_point(data = drought_exp_clean, # underlying data
+                 aes(x = water_treatment,
+                     y = total_g,
+                     alpha = 0.2,
+                     color = water_treatment)) +
+      scale_color_manual(values = type_colors) + # Specified manual color scale 
+      facet_wrap(~species_name) +  # creating different panels for species
+      geom_point(data = model_preds4, 
+                 aes(x = group, 
+                     y = predicted), 
+                 color = "black",
+                 size = 2) + # making the predicted points larger for visibility
+      geom_errorbar(data = model_preds4, 
+                    aes(x = group, 
+                        ymin = conf.low, 
+                        ymax = conf.high), 
+                    width = 0.2, 
+                    color = "black") +
+      facet_wrap(~x)+ # faceting the dot & whisker
+      theme_classic() +
+      theme(panel.spacing = unit(1, "lines"))+
+      labs(x = "Water Treatment", y = "Total Mass (g)")+
+      theme(legend.position = "none", #removing the legend 
+            ) # Rotate x-axis labels by 30 degrees to  fit better 
+            
+       
+    ```
 
 make the underlying data more transparent than the model predictions
 display species names in full (not as species codes like ENCCAL or
