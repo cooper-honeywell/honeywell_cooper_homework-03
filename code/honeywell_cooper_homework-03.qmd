@@ -1,7 +1,9 @@
 ---
- 
- editor: 
-markdown: 
+title: Homework 3
+author: Cooper Honeywell
+date: 5/30/24
+format: docx
+toc: true
  wrap: 72
   warning: false # do not display warnings
     message: false # do not display messages
