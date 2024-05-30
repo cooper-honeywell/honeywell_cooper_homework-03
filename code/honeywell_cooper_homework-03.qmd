@@ -1,10 +1,10 @@
 ---
-title: Homework 3
-author: Cooper Honeywell
-date: 5/30/24
+ 
  editor: 
 markdown: 
  wrap: 72
+  warning: false # do not display warnings
+    message: false # do not display messages
 ---
 
 https://github.com/cooper-honeywell/honeywell_cooper_homework-03.git
@@ -26,7 +26,7 @@ library(modelsummary)
 
 ### Problem 1: 
 
-#### a. 
+#### a. Table
 
 ```{r - model table}
 model_table <- read.csv("model_table.csv") #read in dataset that will be our table
@@ -37,9 +37,7 @@ flextable::as_flextable(model_table) #use flextable to turn dataset -> table
 
 The table rows correspond to an individual model that was evaluated. Each column is a possible predictor variable that is used to make the model. An "n/a" signifies that that particular model does not contain that variable at all. ie: Model 0 does not contain any of the predictor variables, making it the null model, Model 1 contains all three predictor variables making it the saturated model.
 
-b\.
-
-##### Methods:
+b\. Methods:
 
 To examine the influence of Specific leaf area (SLA), water treatment, and species type on total biomass, . We conducted some exploratory visualization to see any immediate trends on our data like which species has the highest mean biomass, which water treatment corresponded to a higher biomass and if there was a correlation between SLA and biomass using a scatter plot and Pearson's r. We then constructed 5 models, including our null model, saturated model and the three models containing a unique combination of two predictors. To evaluate these models, we first evaluated their diagnostics, finding no trends or outliers that would affect our data. To determine the model that best described the effect on total biomass, we produced AIC values for each model, finding that model 4, using species and water treatment a predictors was the model that showed the relationship with total biomass the best. We then produced a visualization of the effects of water treatment, and species on total biomass.
 
@@ -81,7 +79,7 @@ d.  Figure 1: Total plant mass predicted by water treatment and species.
 
     Valliere, Zhang, Sharifi, Rundel (2019) "Can we condition native plants to increase drought tolerance and improve restoration success?" \[Dataset\] [**https://doi.org/10.1002/eap.1863**](https://doi.org/10.1002/eap.1863)
 
-e\.
+e\. Results
 
 We used AIC model selection to determine which variables best described the response of total mass. The best fit model, carrying 77% of all of the predictive power between models, used the species it self, and water treatment (well watered vs. drought stressed) to predict total plant mass. On average, we found that well watered plants had higher total mass when compared plants under drought stressed conditions. On average, Grindelia camporum (Great Valley Gumweeed), has the highest mean total mass, and Acmispon glaber (Deerweed), has the lowest mean total mass.
 
@@ -91,15 +89,15 @@ a.
 
     To affectively visualize my personal data, I was thinking of doing something similar to the Dear Data project. I would make an entry everyday of the week, inclusing symbols that describe my data. Each entry would signify a day and how many times I went to the arbor, how many times I visited the grass, as well as if I was was with friends or not.
 
-b.  Sketch
+b.  
 
     ![](images/clipboard-4054445157.png)
 
-c.  Draft
+c.  
 
     ![](images/affective viz.jpg)
 
-d.  Artist Statement
+d.  
 
 This piece is showing the frequency in which I visit the Arbor and grass in front of the UCSB library respectively, as well as if I visited those places with friends or alone. It is separated by day of the week with a separate row for each week. Each fish tank corresponds to one day, fish type corresponds either the Arbor (orange), or the grass (green), and a top hat signifies that I was with friends during that visit. I created this piece digitally on the platform Canva. It was influenced by the Dear Data postcard project where different things were tracked and documented on a postcard using symbols.
 
