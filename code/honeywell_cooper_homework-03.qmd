@@ -1,12 +1,15 @@
 ---
-editor: 
-  markdown: 
-    wrap: 72
+title: Homework 3
+author: Cooper Honeywell
+date: 5/30/24
+ editor: 
+markdown: 
+ wrap: 72
 ---
 
 https://github.com/cooper-honeywell/honeywell_cooper_homework-03.git
 
-```{r}
+```{r read in packages}
 #| echo : FALSE
 #| message : FALSE
 library(tidyverse)
@@ -21,261 +24,112 @@ library(flextable)
 library(modelsummary)
 ```
 
-Problem 1:
+### Problem 1: 
 
-a\.
+#### a. 
 
-```{r}
-model_table <- read.csv("model_table.csv")
-flextable::as_flextable(model_table) 
+```{r - model table}
+model_table <- read.csv("model_table.csv") #read in dataset that will be our table
+flextable::as_flextable(model_table) #use flextable to turn dataset -> table
 ```
 
-Table 1: Predictor Variables Distribution Among Models
+##### Table 1: Predictor Variables Distribution Among Models
 
-The table rows correspond to an individual model that was evaluated.
-Each column is a possible predictor variable that is used to make the
-model. An "n/a" signifies that that particular model does not contain
-that variable at all. ie: Model 0 does not contain any of the predictor
-variables, making it the null model, Model 1 contains all three
-predictor variables making it the saturated model.
+The table rows correspond to an individual model that was evaluated. Each column is a possible predictor variable that is used to make the model. An "n/a" signifies that that particular model does not contain that variable at all. ie: Model 0 does not contain any of the predictor variables, making it the null model, Model 1 contains all three predictor variables making it the saturated model.
 
-b.  Write a 5-6 sentence “statistical methods” section. (8 points) Your
-    answer should be in paragraph form and include:
+b\.
 
-how you addressed the central question(s) (i.e. to examine the influence
-of \_\_\_\_, \_\_\_\_, and \_\_\_\_ on \_\_\_\_\_, I…) how you chose the
-final model (i.e. to determine the model that best described \_\_\_\_,
-I…) how you visually determined that your final model conformed to the
-assumptions of a linear model (i.e. to evaluate linear model
-assumptions, I…)
+##### Methods:
 
-Methods:
+To examine the influence of Specific leaf area (SLA), water treatment, and species type on total biomass, . We conducted some exploratory visualization to see any immediate trends on our data like which species has the highest mean biomass, which water treatment corresponded to a higher biomass and if there was a correlation between SLA and biomass using a scatter plot and Pearson's r. We then constructed 5 models, including our null model, saturated model and the three models containing a unique combination of two predictors. To evaluate these models, we first evaluated their diagnostics, finding no trends or outliers that would affect our data. To determine the model that best described the effect on total biomass, we produced AIC values for each model, finding that model 4, using species and water treatment a predictors was the model that showed the relationship with total biomass the best. We then produced a visualization of the effects of water treatment, and species on total biomass.
 
-To examine the influence of Specific leaf area (SLA), water treatment,
-and species type on total biomass, . We conducted some exploratory
-visualization to see any immediate trends on our data like which species
-has the highest mean biomass, which water treatment corresponded to a
-higher biomass and if there was a correlation between SLA and biomass
-using a scatter plot and Pearson's r. We then constructed 5 models,
-including our null model, saturated model and the three models
-containing a unique combination of two predictors. To evaluate these
-models, we first evaluated their diagnostics, finding no trends or
-outliers that would affect our data. To determine the model that best
-described the effect on total biomass, we produced AIC values for each
-model, finding that model 4, using species and water treatment a
-predictors was the model that showed the relationship with total biomass
-the best. We then produced a visualization of the effects of water
-treatment, and species on total biomass.
-
-c.  Make a visualization of the model predictions with underlying data
-    for your “best” model. (20 points) Show and annotate all your code.
-    For full credit:
+c.  Visualization
 
     ```{r - visualization}
     type_colors <- c("Well watered" = "dodgerblue1", "Drought stressed" = "sienna") 
-    ggplot() +
+    ggplot() +                                   # assigning colors to treatment
            geom_point(data = drought_exp_clean, # underlying data
                  aes(x = water_treatment,
                      y = total_g,
                      alpha = 0.2,
-                     color = water_treatment)) +
+                     color = water_treatment)) + 
       scale_color_manual(values = type_colors) + # Specified manual color scale 
       facet_wrap(~species_name) +  # creating different panels for species
-      geom_point(data = model_preds4, 
+      geom_point(data = model_preds4,  # model prediction value added
                  aes(x = group, 
                      y = predicted), 
                  color = "black",
                  size = 2) + # making the predicted points larger for visibility
       geom_errorbar(data = model_preds4, 
-                    aes(x = group, 
+                    aes(x = group,   # whiskers for confidence interval
                         ymin = conf.low, 
                         ymax = conf.high), 
                     width = 0.2, 
                     color = "black") +
-      facet_wrap(~x)+ # faceting the dot & whisker
-      theme_classic() +
-      theme(panel.spacing = unit(1, "lines"))+
-      labs(x = "Water Treatment", y = "Total Mass (g)")+
-      theme(legend.position = "none", #removing the legend 
-            ) # Rotate x-axis labels by 30 degrees to  fit better 
+      facet_wrap(~x)+ # faceting the dot & whisker among species
+      theme_classic() + # cleaning up plot
+      theme(panel.spacing = unit(1, "lines"))+ # spacing out panels
+      labs(x = "Water Treatment", y = "Total Mass (g)")+ # plot titles
+      theme(legend.position = "none") #removing the legend 
             
        
     ```
 
-make the underlying data more transparent than the model predictions
-display species names in full (not as species codes like ENCCAL or
-ESCCAL) display water treatment types in full (not as WW or DS)
-represent well-watered and drought stressed treatments with different
-colors use colors that are not the default ggplot() colors facet your
-plot by species remove the legend finalize the plot
+d.  Figure 1: Total plant mass predicted by water treatment and species.
 
-d.  Write a caption for your visualization. (6 points) Include a data
-    citation.
+    This figure features the underlying data of the observations of plant mass across seven flower and grass species. Each species was subjected to two different water treatments, well watered (blue) and simulating drought (brown). On top of the observations is the model predicted value along with our confidence interval represented by the black dot and whiskers.
 
-e.  Write a 3-4 sentence results section. (10 points) Your answer should
-    be in paragraph form and address the following points:
+    Valliere, Zhang, Sharifi, Rundel (2019) "Can we condition native plants to increase drought tolerance and improve restoration success?" \[Dataset\] [**https://doi.org/10.1002/eap.1863**](https://doi.org/10.1002/eap.1863)
 
-what predictors “best” described total mass (include model statistics
-here)? on average, what differences did you find between water
-treatments? on average, what differences did you find between species?
+e\.
 
-Problem 2:
+We used AIC model selection to determine which variables best described the response of total mass. The best fit model, carrying 77% of all of the predictive power between models, used the species it self, and water treatment (well watered vs. drought stressed) to predict total plant mass. On average, we found that well watered plants had higher total mass when compared plants under drought stressed conditions. On average, Grindelia camporum (Great Valley Gumweeed), has the highest mean total mass, and Acmispon glaber (Deerweed), has the lowest mean total mass.
 
-a.  Describe in words what an affective visualization could look like
-    for your personal data (3-5 sentences). (2 points)
+#### Problem 2:
 
-    To affectively visualize my personal data, I was thinking of doing
-    something similar to the Dear Data project. I would make an entry
-    everyday of the week, inclusing symbols that describe my data. Each
-    entry would signify a day and how many times I went to the arbor,
-    how many times I visited the grass, as well as if I was was with
-    friends or not.
+a.  
 
-b.  Create a sketch (on paper) of your idea. (2 points) Include a photo
-    of this sketch in your submission.
+    To affectively visualize my personal data, I was thinking of doing something similar to the Dear Data project. I would make an entry everyday of the week, inclusing symbols that describe my data. Each entry would signify a day and how many times I went to the arbor, how many times I visited the grass, as well as if I was was with friends or not.
 
-c.  Make a draft of your visualization. (12 points) Feel free to be
-    creative with this! You do not have to do this in R. You could
-    create a sculpture, painting, textile object, etc.
+b.  Sketch
 
-If you are making your visualization outside of R, include a photo of
-your visualization in your submission.
+    ![](images/clipboard-4054445157.png)
 
-d.  Write an artist statement. (8 points) An artist statement gives the
-    audience context to understand your work. Write 4-5 sentences to
-    address:
+c.  Draft
 
-the content of your piece (what are you showing?) the influences (what
-did techniques/artists/etc. did you find influential in creating your
-work?) the form of your work (written code, watercolor, oil painting,
-etc.) your process (how did you create your work?)
+    ![](images/affective viz.jpg)
 
-This piece is showing the frequency in which I visit the Arbor and grass
-in front of the UCSB library respectively, as well as if I visited those
-places with friends or alone. It is separated by day of the week with a
-separate row for each week. Each fish tank corresponds to one day, fish
-type corresponds either the Arbor (orange), or the grass (green), and a
-top hat signifies that I was with friends during that visit. I created
-this piece digitally on the platform Canva. It was influenced by the
-Dear Data postcard project where different things were tracked and
-documented on a postcard using symbols.
+d.  Artist Statement
 
-Problem 3:
+This piece is showing the frequency in which I visit the Arbor and grass in front of the UCSB library respectively, as well as if I visited those places with friends or alone. It is separated by day of the week with a separate row for each week. Each fish tank corresponds to one day, fish type corresponds either the Arbor (orange), or the grass (green), and a top hat signifies that I was with friends during that visit. I created this piece digitally on the platform Canva. It was influenced by the Dear Data postcard project where different things were tracked and documented on a postcard using symbols.
 
-a. Revisit and summarize (6 points) What are the statistical tests the
-authors are using to address their main research question?
+### Problem 3: Statistical Critique
 
-The authors used a Mann-Whitney-U Test to evaluate differences in the
-use of altitude ranges
-by both snow and common leopards to determine how much their
-geographical ranges overlap. They also compiled data from studies
-depicting the diets of each leopard and summarized it to describe how
-much of each leopards diet consists of a certain group of prey to
-explore the overlap in the two predators diets. All to determine the
-likelihood of competition between two species that used to be separated
-by thousands of feet in elevation.
+a.
 
-**Fig. 1. Diet composition in terms of frequency of occurrence of
-domestic prey (black), wild prey i.e. mammals and birds (white) and
-other prey e.g. amphibians, reptiles etc. (grey) in common leopard
-(*Panthera pardus*) and snow leopard (*Panthera uncia*) with respect to
-study sites and distribution range (IUCN 2012, modified). Study areas:
-CL, 1 –
-L[ukarewsky]{.smallcaps}[Citation1988](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-2 –
-S[challer]{.smallcaps}[Citation1977](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-3 – K[handal]{.smallcaps} & S[rivastava]{.smallcaps} (unpublished); 4 –
-W[egge]{.smallcaps} et
-al. [Citation2009](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-5 (Deurali area); 6 (Sagarmatha) – L[ovari]{.smallcaps} (unpublished); 7
-– J[ohnson]{.smallcaps} et
-al. [Citation1993](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-8 – Bandipur area
-(J[ohnsingh]{.smallcaps}[Citation1992](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-K[aranth]{.smallcaps} &
-S[unquist]{.smallcaps}[Citation1995](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-A[ndheria]{.smallcaps} et
-al. [Citation2007](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#));
-9 –
-S[athyakumar]{.smallcaps}[Citation1992](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-10 (Doi Mon Jong) – L[ovari]{.smallcaps} (unpublished); 11 –
-R[abinowitz]{.smallcaps}[Citation1989](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#).
-SL, 1 – S[challer]{.smallcaps} et
-al. [Citation1988b](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-2 – S[challer]{.smallcaps} et
-al. [Citation1987](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-3, 7, 8 –
-S[challer]{.smallcaps}[Citation1977](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-4, 5 – B[agchi]{.smallcaps} &
-M[ishra]{.smallcaps}[Citation2006](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-6 – C[hundawat]{.smallcaps} &
-R[awat]{.smallcaps}[Citation1994](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-9 –
-J[ackson]{.smallcaps}[Citation1996](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#);
-10 – O[li]{.smallcaps} et
-al. [Citation1993](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#),
-11 (Sagarmatha) – L[ovari]{.smallcaps} (unpublished); 12, 13, 14, 15, 16
-– S[challer]{.smallcaps}, R[en]{.smallcaps} &
-Q[iu]{.smallcaps}[Citation1988](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#).
-Shaded area: distribution range.**
+The authors used a Mann-Whitney-U Test to evaluate differences in the use of altitude ranges
+by both snow and common leopards to determine how much their geographical ranges overlap. They also compiled data from studies depicting the diets of each leopard and summarized it to describe how much of each leopards diet consists of a certain group of prey to explore the overlap in the two predators diets. All to determine the likelihood of competition between two species that used to be separated by thousands of feet in elevation.
+
+**Fig. 1. Diet composition in terms of frequency of occurrence of domestic prey (black), wild prey i.e. mammals and birds (white) and other prey e.g. amphibians, reptiles etc. (grey) in common leopard (*Panthera pardus*) and snow leopard (*Panthera uncia*) with respect to study sites and distribution range (IUCN 2012, modified). Study areas: CL, 1 – L[ukarewsky]{.smallcaps}[Citation1988](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 2 – S[challer]{.smallcaps}[Citation1977](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 3 – K[handal]{.smallcaps} & S[rivastava]{.smallcaps} (unpublished); 4 – W[egge]{.smallcaps} et al. [Citation2009](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 5 (Deurali area); 6 (Sagarmatha) – L[ovari]{.smallcaps} (unpublished); 7 – J[ohnson]{.smallcaps} et al. [Citation1993](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 8 – Bandipur area (J[ohnsingh]{.smallcaps}[Citation1992](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); K[aranth]{.smallcaps} & S[unquist]{.smallcaps}[Citation1995](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); A[ndheria]{.smallcaps} et al. [Citation2007](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#)); 9 – S[athyakumar]{.smallcaps}[Citation1992](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 10 (Doi Mon Jong) – L[ovari]{.smallcaps} (unpublished); 11 – R[abinowitz]{.smallcaps}[Citation1989](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#). SL, 1 – S[challer]{.smallcaps} et al. [Citation1988b](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 2 – S[challer]{.smallcaps} et al. [Citation1987](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 3, 7, 8 – S[challer]{.smallcaps}[Citation1977](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 4, 5 – B[agchi]{.smallcaps} & M[ishra]{.smallcaps}[Citation2006](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 6 – C[hundawat]{.smallcaps} & R[awat]{.smallcaps}[Citation1994](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 9 – J[ackson]{.smallcaps}[Citation1996](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#); 10 – O[li]{.smallcaps} et al. [Citation1993](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#), 11 (Sagarmatha) – L[ovari]{.smallcaps} (unpublished); 12, 13, 14, 15, 16 – S[challer]{.smallcaps}, R[en]{.smallcaps} & Q[iu]{.smallcaps}[Citation1988](https://www.tandfonline.com/doi/full/10.1080/03949370.2013.806362?casa_token=aia1DdgfIocAAAAA%3A8a_ga0d4j9WyhL4PnI3Pxs55sAxadQDPVJ8u8SRmH9wHjJfClBKSm-WFWfSkXQGcvF3oNIMqEOh4RQ#). Shaded area: distribution range.**
 
 ![](images/clipboard-3088740182.png)
 
-**Fig. 2. Relative frequency of occurrence (%) of prey weight categories
-in the common leopard (*Panthera pardus*, *n* = 11) and the snow leopard
-(*Panthera uncia*, *n* = 16) diets (median, quartiles). N~CL~ = 11,
-N~SL~ = 16.**
+**Fig. 2. Relative frequency of occurrence (%) of prey weight categories in the common leopard (*Panthera pardus*, *n* = 11) and the snow leopard (*Panthera uncia*, *n* = 16) diets (median, quartiles). N~CL~ = 11, N~SL~ = 16.**
 
 ![](images/clipboard-1838738008.png)
 
-b.  Visual clarity (10 points) How clearly did the authors visually
-    represent their statistics in figures? For example, are the x- and
-    y-axes in a logical position? Do they show summary statistics (means
-    and SE, for example) and/or model predictions, and if so, do they
-    show the underlying data?
+b.  
 
-    Fig 1 is kind of difficult to digest as you have to refer back and
-    forth between two maps to see where the species overlap and what
-    their diet consists of. The pie charts represent the composition of
-    the leopard's diet in each location using the frequency of
-    occurrence of prey type.
+    Fig 1 is kind of difficult to digest as you have to refer back and forth between two maps to see where the species overlap and what their diet consists of. The pie charts represent the composition of the leopard's diet in each location using the frequency of occurrence of prey type.
 
-    Fig 2 is much clearer in communicating the data. The axes are clear
-    and labeled, the bars are shaded based on species and the error bars
-    are easy to see. They are showing the means and standard error for
-    the prey weight categories % relative frequency of occurrence. The
-    did not include the underlying data.
+    Fig 2 is much clearer in communicating the data. The axes are clear and labeled, the bars are shaded based on species and the error bars are easy to see. They are showing the means and standard error for the prey weight categories % relative frequency of occurrence. The did not include the underlying data.
 
-c.  Aesthetic clarity (10 points) How well did the authors handle
-    “visual clutter”? How would you describe the the data:ink ratio?
+c.  
 
-    Fig 1 has too much visual clutter in my opinion. The borders of the
-    maps where the leopards don't live is distracting. The numbers
-    corresponding to each study area/pie chart could be mistaken for
-    something else if you don't read the caption carefully. Having two
-    maps to look back and forth between seems like too much clutter. I
-    would say there is too much ink in the data:ink ratio.
+    Fig 1 has too much visual clutter in my opinion. The borders of the maps where the leopards don't live is distracting. The numbers corresponding to each study area/pie chart could be mistaken for something else if you don't read the caption carefully. Having two maps to look back and forth between seems like too much clutter. I would say there is too much ink in the data:ink ratio.
 
-    Fig 2 is a clean figure. It presents the data clearly and is not
-    complicated to see the trends. I think it passes the data:ink ratio
-    test.
+    Fig 2 is a clean figure. It presents the data clearly and is not complicated to see the trends. I think it passes the data:ink ratio test.
 
-d.  Recommendations (can be longer than 4 sentences, 10 points) What
-    recommendations would you make to make the figure better? What would
-    you take out, add, or change? Provide explanations/justifications
-    for each of your recommendations.
+d.  
 
-My main recommendation would be to make one map, with two different
-shadings for each leopards geographic range and each study site labeled.
-And then paired with that they could include plots faceted by study site
-or elevation, comparing the diet composition of both leopards. This
-would make it easier to compare the two species and their diets. This
-would help in visualizing if there is a higher chance for competition
-between the leopards at different sites/elevations.
-
-Alternatively, if they did not represent their statistics in a figure,
-what kind of figure would you recommend to them? Describe the x- and
-y-axes, with any geometries and aesthetics (colors, etc.). Provide
-enough explanation such that someone would be able to create the figure
-you describe in code. Provide explanations/justifications for the figure
-you would recommend.
+My main recommendation would be to make one map, with two different shadings for each leopards geographic range and each study site labeled. And then paired with that they could include plots faceted by study site or elevation, comparing the diet composition of both leopards. This would make it easier to compare the two species and their diets. This would help in visualizing if there is a higher chance for competition between the leopards at different sites/elevations.
