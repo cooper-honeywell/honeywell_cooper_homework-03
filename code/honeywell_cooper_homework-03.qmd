@@ -42,36 +42,37 @@ b\. Methods:
 
 To examine the influence of Specific leaf area (SLA), water treatment, and species type on total biomass, . We conducted some exploratory visualization to see any immediate trends on our data like which species has the highest mean biomass, which water treatment corresponded to a higher biomass and if there was a correlation between SLA and biomass using a scatter plot and Pearson's r. We then constructed 5 models, including our null model, saturated model and the three models containing a unique combination of two predictors. To evaluate these models, we first evaluated their diagnostics, finding no trends or outliers that would affect our data. To determine the model that best described the effect on total biomass, we produced AIC values for each model, finding that model 4, using species and water treatment a predictors was the model that showed the relationship with total biomass the best. We then produced a visualization of the effects of water treatment, and species on total biomass.
 
-c.  Visualization
+```{r cleaning and inserting dataset}
 
-    ```{r - cleaning and inserting dataset}
-    drought_exp <- read_xlsx(path = here("data", 
-                                         "Valliere_etal_EcoApps_Data.xlsx"),
-                             sheet = "First Harvest")
-    drought_exp_clean <- drought_exp %>% 
-      clean_names() %>% # nicer column names
-      mutate(species_name = case_when( # adding column with species scientific names
-        species == "ENCCAL" ~ "Encelia californica", # bush sunflower
-        species == "ESCCAL" ~ "Eschscholzia californica", # California poppy
-        species == "PENCEN" ~ "Penstemon centranthifolius", # Scarlet bugler
-        species == "GRICAM" ~ "Grindelia camporum", # great valley gumweed
-        species == "SALLEU" ~ "Salvia leucophylla", # Purple sage
-        species == "STIPUL" ~ "Nasella pulchra", # Purple needlegrass
-        species == "LOTSCO" ~ "Acmispon glaber" # deerweed
-      )) %>% 
-      relocate(species_name, .after = species) %>% # moving species_name column after species
-      mutate(water_treatment = case_when( # adding column with full treatment names
-        water == "WW" ~ "Well watered",
-        water == "DS" ~ "Drought stressed"
-      )) %>% 
-      relocate(water_treatment, .after = water) # moving water_treatment column after water
+drought_exp <- read_xlsx(path = here("data", 
+                                     "Valliere_etal_EcoApps_Data.xlsx"),
+                         sheet = "First Harvest")
+drought_exp_clean <- drought_exp %>% 
+  clean_names() %>% # nicer column names
+  mutate(species_name = case_when( # adding column with species scientific names
+    species == "ENCCAL" ~ "Encelia californica", # bush sunflower
+    species == "ESCCAL" ~ "Eschscholzia californica", # California poppy
+    species == "PENCEN" ~ "Penstemon centranthifolius", # Scarlet bugler
+    species == "GRICAM" ~ "Grindelia camporum", # great valley gumweed
+    species == "SALLEU" ~ "Salvia leucophylla", # Purple sage
+    species == "STIPUL" ~ "Nasella pulchra", # Purple needlegrass
+    species == "LOTSCO" ~ "Acmispon glaber" # deerweed
+  )) %>% 
+  relocate(species_name, .after = species) %>% # moving species_name column after species
+  mutate(water_treatment = case_when( # adding column with full treatment names
+    water == "WW" ~ "Well watered",
+    water == "DS" ~ "Drought stressed"
+  )) %>% 
+  relocate(water_treatment, .after = water) # moving water_treatment column after water
 
-    model4 <- lm(total_g ~ water_treatment + species_name,
-                 data = drought_exp_clean)
-    model_preds4 <- ggpredict(model4, 
-                             terms = c( "species_name", 
-                                       "water_treatment"))
-    ```
+model4 <- lm(total_g ~ water_treatment + species_name,
+             data = drought_exp_clean)
+model_preds4 <- ggpredict(model4, 
+                         terms = c( "species_name", 
+                                   "water_treatment"))
+```
+
+c.  Creating Visualization
 
     ```{r - visualization}
     type_colors <- c("Well watered" = "dodgerblue1", "Drought stressed" = "sienna") 
